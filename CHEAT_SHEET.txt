@@ -1,0 +1,59 @@
+# 🔧 FISKALPRO - KORISNE KOMANDE
+# ===============================
+
+# 📁 GitHub
+# ---------
+Username: kaurinovic@gmail.com
+Token: (čuvati sigurno!)
+
+git status                  # Proveri status
+git add .                   # Dodaj sve fajlove
+git commit -m "Poruka"      # Napravi commit
+git push                    # Pošalji na GitHub
+git pull                    # Preuzmi sa GitHub-a
+
+
+# 🐍 Python & Virtuelno Okruženje
+# -------------------------------
+source venv/bin/activate    # Aktiviraj virtuelno okruženje
+deactivate                  # Deaktiviraj virtuelno okruženje
+
+python3 main.py             # Pokreni GUI aplikaciju
+python3 console_test.py     # Pokreni console interfejs
+
+pip install ime_paketa      # Instaliraj paket
+pip freeze > requirements.txt # Snimi pakete
+
+
+# 🗄️ Baza Podataka
+# ----------------
+sqlite3 database.db         # SQLite konzola
+.tables                     # Prikaži tabele
+SELECT * FROM artikli;      # Primer upita
+
+
+# 🖥️ GUI Pokretanje (ako ima problema)
+# -----------------------------------
+QT_QPA_PLATFORM=xcb python3 main.py   # Forsiraj X11
+QT_QPA_PLATFORM=wayland python3 main.py # Forsiraj Wayland
+xvfb-run -a python3 main.py           # Virtuelni display
+
+
+# 🔧 Razvoj
+# ---------
+python3 database/models.py            # Testiraj bazu
+python3 test_racun_service.py         # Testiraj servise
+
+
+# 📊 Backup & Restore
+# -------------------
+cp database.db database_backup.db     # Backup baze
+rm database.db                        # Obriši bazu (pažljivo!)
+python3 database/models.py            # Kreiraj novu bazu
+
+
+# 🚀 Pokretanje nakon reboot-a
+# ----------------------------
+cd ~/FiskalPro
+source venv/bin/activate
+python3 main.py
