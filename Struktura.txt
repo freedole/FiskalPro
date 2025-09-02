@@ -1,0 +1,12 @@
+FiskalPro/
+├── venv/                 # Virtuelno okruženje
+├── database/
+│   ├── __init__.py
+│   └── models.py         # Ovde ćemo definisati tabele
+├── modules/
+│   ├── core/             # Za jezgro aplikacije
+│   │   └── __init__.py
+│   └── ui/               # Za .ui fajlove
+│       └── __init__.py
+├── resources/            # Za ikone, slike
+└── main.py               # Glavna ulazna tačka

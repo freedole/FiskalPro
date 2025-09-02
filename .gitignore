@@ -1,0 +1,24 @@
+# Virtualno okruženje
+venv/
+ENV/
+
+# Baza podataka (ne šaljemo je na GitHub)
+*.db
+*.sqlite
+database.db
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Log fajlovi
+*.log
+
+# IDE fajlovi
+.vscode/
+.idea/
+
+# OS fajlovi
+.DS_Store
+Thumbs.db
