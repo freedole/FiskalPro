@@ -34,30 +34,14 @@
 - **SQLite** - Baza podataka (razvojna faza)
 - **Qt Designer** - Dizajn GUI interfejsa
 
-## 📦 Instalacija
-
-### 1. Klonirajte repozitorijum
-```bash
-git clone https://github.com/freedole/FiskalPro.git
-cd FiskalPro
-
-
-📄 Licenca
-Ovaj projekat je licenciran pod MIT licencom - pogledajte LICENSE fajl za detalje.
-
-👥 Autori
+## 👥 Autori
 freedole - Glavni programer
+ProCat   - Beta tester i business analitičar
 
-ProCat - Beta tester i business analitičar
-
-📞 Podrška
+## 📞 Podrška
 Ako imate pitanja ili problema:
+- Otvorite issue
+- Pošaljite email na: kaurinovic@gmail.com
+- Kontaktirajte nas preko GitHub discus-ija
 
-Otvorite issue
-
-Pošaljite email na: kaurinovic@gmail.com
-
-Kontaktirajte nas preko GitHub discusija
-
-
-⭐ Podržite nas davanjem zvezdica na GitHub-u!
+## ⭐ Podržite nas davanjem zvezdica na GitHub-u!
