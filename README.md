@@ -35,7 +35,9 @@
 - **Qt Designer** - Dizajn GUI interfejsa
 
 ## 👥 Autori
+
 freedole - Glavni programer
+
 ProCat   - Beta tester i business analitičar
 
 ## 📞 Podrška
