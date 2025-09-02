@@ -1,3 +1,4 @@
+from modules.core.utils import format_km, parsiraj_km
 from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QLabel, 
                              QLineEdit, QComboBox, QPushButton, QMessageBox)
 from PyQt5.QtCore import Qt
@@ -24,7 +25,7 @@ class ArtikalForma(QDialog):
         layout.addWidget(self.naziv_input)
         
         # Cena
-        layout.addWidget(QLabel('Cena:'))
+        layout.addWidget(QLabel('Cijena:'))
         self.cena_input = QLineEdit()
         if self.artikal:
             self.cena_input.setText(str(self.artikal.cena))
@@ -84,7 +85,7 @@ class ArtikalForma(QDialog):
         try:
             # Validacija
             naziv = self.naziv_input.text().strip()
-            cena = float(self.cena_input.text().strip())
+            cena = parsiraj_km(self.cena_input.text().strip())
             barkod = self.barkod_input.text().strip() or None
             kolicina = int(self.kolicina_input.text().strip())
             kategorija_id = self.kategorija_combo.currentData()

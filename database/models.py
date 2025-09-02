@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, DateTime  # DODATO
+from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, DateTime, Numeric  # DODATO
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from datetime import datetime  # DODATO
@@ -20,44 +20,39 @@ class Artikal(Base):
     __tablename__ = 'artikli'
     id = Column(Integer, primary_key=True)
     naziv = Column(String(100), nullable=False)
-    cena = Column(Float, nullable=False)
+    cena = Column(Numeric(10, 4), nullable=False)  # PROMJENI: 10 cifara, 4 decimale
     barkod = Column(String(20), unique=True)
     kolicina_na_stanju = Column(Integer, default=0)
     kategorija_id = Column(Integer, ForeignKey('kategorije.id'))
     kategorija = relationship("Kategorija", back_populates="artikli")
 
     def __repr__(self):
-        return f"<Artikal(naziv='{self.naziv}', cena={self.cena}, stanje={self.kolicina_na_stanju})>"
+        return f"<Artikal(naziv='{self.naziv}', cena={float(self.cena)}, stanje={self.kolicina_na_stanju})>"
 
 class Racun(Base):
     __tablename__ = 'racuni'
-    
     id = Column(Integer, primary_key=True)
     broj_racuna = Column(String(20), unique=True, nullable=False)
     datum_vreme = Column(DateTime, default=datetime.now)
-    ukupan_iznos = Column(Float, default=0.0)
-    placen_iznos = Column(Float, default=0.0)
+    ukupan_iznos = Column(Numeric(10, 4), default=0.0)  # PROMJENI
+    placen_iznos = Column(Numeric(10, 4), default=0.0)  # PROMJENI
     nacin_placanja = Column(String(20), default='gotovina')
-    
     stavke = relationship("StavkaRacuna", back_populates="racun")
-    
+
     def __repr__(self):
-        return f"<Racun(broj={self.broj_racuna}, iznos={self.ukupan_iznos})>"
+        return f"<Racun(broj={self.broj_racuna}, iznos={float(self.ukupan_iznos)})>"
 
 class StavkaRacuna(Base):
     __tablename__ = 'stavke_racuna'
-    
     id = Column(Integer, primary_key=True)
     kolicina = Column(Integer, nullable=False)
-    cena = Column(Float, nullable=False)
-    ukupno = Column(Float, nullable=False)
-    
+    cena = Column(Numeric(10, 4), nullable=False)  # PROMJENI
+    ukupno = Column(Numeric(10, 4), nullable=False)  # PROMJENI
     racun_id = Column(Integer, ForeignKey('racuni.id'))
     artikal_id = Column(Integer, ForeignKey('artikli.id'))
-    
     racun = relationship("Racun", back_populates="stavke")
     artikal = relationship("Artikal")
-    
+
     def __repr__(self):
         return f"<Stavka(artikal={self.artikal.naziv}, kolicina={self.kolicina})>"
 
