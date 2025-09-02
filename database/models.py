@@ -1,6 +1,7 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, DateTime  # DODATO
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
+from datetime import datetime  # DODATO
 
 # Kreiramo bazu podataka
 engine = create_engine('sqlite:///database.db', echo=True)
@@ -28,36 +29,68 @@ class Artikal(Base):
     def __repr__(self):
         return f"<Artikal(naziv='{self.naziv}', cena={self.cena}, stanje={self.kolicina_na_stanju})>"
 
-# Kreiramo sve tabele
-Base.metadata.create_all(engine)
+class Racun(Base):
+    __tablename__ = 'racuni'
+    
+    id = Column(Integer, primary_key=True)
+    broj_racuna = Column(String(20), unique=True, nullable=False)
+    datum_vreme = Column(DateTime, default=datetime.now)
+    ukupan_iznos = Column(Float, default=0.0)
+    placen_iznos = Column(Float, default=0.0)
+    nacin_placanja = Column(String(20), default='gotovina')
+    
+    stavke = relationship("StavkaRacuna", back_populates="racun")
+    
+    def __repr__(self):
+        return f"<Racun(broj={self.broj_racuna}, iznos={self.ukupan_iznos})>"
+
+class StavkaRacuna(Base):
+    __tablename__ = 'stavke_racuna'
+    
+    id = Column(Integer, primary_key=True)
+    kolicina = Column(Integer, nullable=False)
+    cena = Column(Float, nullable=False)
+    ukupno = Column(Float, nullable=False)
+    
+    racun_id = Column(Integer, ForeignKey('racuni.id'))
+    artikal_id = Column(Integer, ForeignKey('artikli.id'))
+    
+    racun = relationship("Racun", back_populates="stavke")
+    artikal = relationship("Artikal")
+    
+    def __repr__(self):
+        return f"<Stavka(artikal={self.artikal.naziv}, kolicina={self.kolicina})>"
 
 # Pravimo sesiju
 Session = sessionmaker(bind=engine)
-session = Session()
 
-# DODAJEMO TESTNE PODATKE (nakon create_all i session)
-try:
-    # Proverimo da li već postoje kategorije da ne bismo duplirali
-    if session.query(Kategorija).count() == 0:
-        # Kreiramo kategorije
-        k1 = Kategorija(naziv="Pića")
-        k2 = Kategorija(naziv="Slatkiši")
-        k3 = Kategorija(naziv="Mlečni proizvodi")
-        
-        session.add_all([k1, k2, k3])
-        session.commit()
-        
-        # Kreiramo artikle
-        a1 = Artikal(naziv="Coca-Cola 0.5L", cena=150.0, barkod="123456789", kolicina_na_stanju=50, kategorija=k1)
-        a2 = Artikal(naziv="Čokolada 100g", cena=200.0, barkod="987654321", kolicina_na_stanju=30, kategorija=k2)
-        a3 = Artikal(naziv="Mleko 1L", cena=100.0, barkod="555555555", kolicina_na_stanju=20, kategorija=k3)
-        
-        session.add_all([a1, a2, a3])
-        session.commit()
-        print("✓ Testni podaci uspešno dodati u bazu!")
-    else:
-        print("✓ Baza već sadrži podatke, preskačem dodavanje testnih.")
+if __name__ == "__main__":
+    # Kreiraj tabele i testne podatke SAMO kada se skripta pokreće direktno
+    Base.metadata.create_all(engine)
+    session = Session()
 
-except Exception as e:
-    session.rollback()
-    print(f"✗ Greška pri dodavanju testnih podataka: {e}")
+    try:
+        # Proverimo da li već postoje kategorije da ne bismo duplirali
+        if session.query(Kategorija).count() == 0:
+            # Kreiramo kategorije
+            k1 = Kategorija(naziv="Pića")
+            k2 = Kategorija(naziv="Slatkiši")
+            k3 = Kategorija(naziv="Mlečni proizvodi")
+            
+            session.add_all([k1, k2, k3])
+            session.commit()
+            
+            # Kreiramo artikle
+            a1 = Artikal(naziv="Coca-Cola 0.5L", cena=150.0, barkod="123456789", kolicina_na_stanju=50, kategorija=k1)
+            a2 = Artikal(naziv="Čokolada 100g", cena=200.0, barkod="987654321", kolicina_na_stanju=30, kategorija=k2)
+            a3 = Artikal(naziv="Mleko 1L", cena=100.0, barkod="555555555", kolicina_na_stanju=20, kategorija=k3)
+            
+            session.add_all([a1, a2, a3])
+            session.commit()
+            print("✓ Testni podaci uspešno dodati u bazu!")
+        else:
+            print("✓ Baza već sadrži podatke, preskačem dodavanje testnih.")
+
+    except Exception as e:
+        session.rollback()
+        print(f"✗ Greška pri dodavanju testnih podataka: {e}")
