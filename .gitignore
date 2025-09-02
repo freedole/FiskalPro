@@ -1,3 +1,11 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[codz]
+*$py.class
+
+# C extensions
+*.so
+
 # Virtualno okruženje
 venv/
 ENV/
@@ -6,11 +14,6 @@ ENV/
 *.db
 *.sqlite
 database.db
-
-# Python cache
-__pycache__/
-*.py[cod]
-*$py.class
 
 # Log fajlovi
 *.log
