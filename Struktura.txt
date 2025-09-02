@@ -1,12 +1,18 @@
 FiskalPro/
-├── venv/                 # Virtuelno okruženje
 ├── database/
-│   ├── __init__.py
-│   └── models.py         # Ovde ćemo definisati tabele
+│   ├── models.py          # SQLAlchemy modeli baze
+│   └── __init__.py
 ├── modules/
-│   ├── core/             # Za jezgro aplikacije
+│   ├── core/              # Jezgro aplikacije
+│   │   ├── racun_service.py
+│   │   ├── izvestaji_service.py
+│   │   ├── utils.py       # KM formatiranje
 │   │   └── __init__.py
-│   └── ui/               # Za .ui fajlove
+│   └── ui/                # Grafički interfejs
+│       ├── artikli_forma.py
 │       └── __init__.py
-├── resources/            # Za ikone, slike
-└── main.py               # Glavna ulazna tačka
+├── resources/             # Resursi (ikone, slike)
+├── main.py               # Glavna ulazna tačka
+├── console_test.py       # Console interfejs
+├── requirements.txt      # Zavisnosti
+└── README.md            # Ova dokumentacija
