@@ -25,3 +25,9 @@ database.db
 # OS fajlovi
 .DS_Store
 Thumbs.db
+
+# Confidential files - NE commit-ovati na GitHub!
+*.token
+*.key
+secret.txt
+credentials.txt
