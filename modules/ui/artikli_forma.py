@@ -1,14 +1,14 @@
-from modules.core.utils import format_km, parsiraj_km
 from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QLabel, 
                              QLineEdit, QComboBox, QPushButton, QMessageBox)
 from PyQt5.QtCore import Qt
 from database.models import Session, Artikal, Kategorija
+from modules.core.utils import parsiraj_km
 
 class ArtikalForma(QDialog):
-    def __init__(self, artikal=None, parent=None):
+    def __init__(self, artikal=None, parent=None, session=None):
         super().__init__(parent)
         self.artikal = artikal
-        self.session = Session()
+        self.session = session or Session()
         self.initUI()
         
     def initUI(self):
@@ -25,7 +25,7 @@ class ArtikalForma(QDialog):
         layout.addWidget(self.naziv_input)
         
         # Cena
-        layout.addWidget(QLabel('Cijena:'))
+        layout.addWidget(QLabel('Cena:'))
         self.cena_input = QLineEdit()
         if self.artikal:
             self.cena_input.setText(str(self.artikal.cena))
@@ -90,15 +90,18 @@ class ArtikalForma(QDialog):
             kolicina = int(self.kolicina_input.text().strip())
             kategorija_id = self.kategorija_combo.currentData()
             
+            print(f"🔄 Snimanje artikla: {naziv}, cena: {cena}")
+            
             if not naziv:
                 raise ValueError("Naziv artikla je obavezan")
             
             if cena <= 0:
-                raise ValueError("Cena mora biti veća od 0")
+                raise ValueError("Cijena mora biti veća od 0")
             
             # Snimanje
             if self.artikal:
                 # Edit mode
+                print(f"📝 Editovanje postojećeg artikla ID: {self.artikal.id}")
                 self.artikal.naziv = naziv
                 self.artikal.cena = cena
                 self.artikal.barkod = barkod
@@ -106,6 +109,7 @@ class ArtikalForma(QDialog):
                 self.artikal.kategorija_id = kategorija_id
             else:
                 # New mode
+                print("🆕 Kreiranje novog artikla")
                 novi_artikal = Artikal(
                     naziv=naziv,
                     cena=cena,
@@ -115,12 +119,18 @@ class ArtikalForma(QDialog):
                 )
                 self.session.add(novi_artikal)
             
+            # 🔥 OVO JE KLJUČNO - commit promena
             self.session.commit()
+            print("✅ Promene uspešno commit-ovane u bazu!")
+            
             self.accept()
             
         except ValueError as e:
+            print(f"❌ Validaciona greška: {e}")
+            self.session.rollback()
             QMessageBox.warning(self, 'Greška', f"Neispravni podaci: {e}")
         except Exception as e:
+            print(f"❌ Greška pri snimanju: {e}")
             self.session.rollback()
             QMessageBox.critical(self, 'Greška', f"Došlo je do greške: {e}")
     

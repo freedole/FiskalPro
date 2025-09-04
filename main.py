@@ -88,14 +88,34 @@ class MainWindow(QMainWindow):
         try:
             row = index.row()
             artikal_id = int(self.table.model().index(row, 0).data())
+            
+            # Učitaj artikal iz baze KORISTEĆI ISTU SESIJU
             artikal = self.session.query(Artikal).get(artikal_id)
+            
             if artikal:
-                forma = ArtikalForma(artikal=artikal, parent=self)
+                print(f"📖 Učitan artikal za edit: {artikal.naziv}, cena: {artikal.cena}")
+                
+                # Prosledi TEKUĆU sesiju formi
+                forma = ArtikalForma(artikal=artikal, parent=self, session=self.session)
+                
                 if forma.exec_():
+                    print("🔄 Artikal izmenjen, osvežavam prikaz...")
                     self.ucitaj_artikle()
                     self.statusBar().showMessage('Artikal uspešno izmenjen!')
+                    
         except Exception as e:
             print(f"❌ Greška pri editovanju artikla: {e}")
+
+    def dodaj_artikal(self):
+        print("🔄 Otvaranje forme za artikal...")
+        try:
+            # Prosledi TEKUĆU sesiju formi
+            forma = ArtikalForma(parent=self, session=self.session)
+            if forma.exec_():
+                self.ucitaj_artikle()
+                self.statusBar().showMessage('Artikal uspešno dodat!')
+        except Exception as e:
+            print(f"❌ Greška pri otvaranju forme: {e}")           
 
     def kreiraj_meni(self):
         print("🔄 Kreiranje menija...")
